@@ -16,13 +16,10 @@ async function signup(req, res) {
     const user = new User({ name, email, password });
     await user.save();
 
-    // Generate JWT token for the user
-    const token = generateToken(user);
-
     // Respond with success message and token
     res.status(200).json({
       message: 'User registered successfully!',
-      token,
+    
       user: {
         id: user._id,
         name: user.name,
