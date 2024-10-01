@@ -35,17 +35,18 @@ async function signup(req, res) {
 async function login(req, res) {
   const { email, password } = req.body;
   try {
-    // Check if the user exists
+    // Check if the user exists by email
     const user = await User.findOne({ email });
 
-    // Validate password
+    // Validate the password (assuming `matchPassword` is a method in the User model)
     if (user && (await user.matchPassword(password))) {
       // Generate JWT token for the user
       const token = generateToken(user);
 
-      // Respond with success message and token
-      res.status(200).json({
+      // Respond with success message, token, and user details
+      return res.status(200).json({
         message: 'Login successful!',
+        success: true,
         token,
         user: {
           id: user._id,
@@ -54,10 +55,12 @@ async function login(req, res) {
         },
       });
     } else {
-      res.status(401).json({ message: 'Invalid email or password' });
+      // If user or password is invalid
+      return res.status(401).json({ message: 'Invalid email or password' });
     }
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    // Handle any other errors during the process
+    return res.status(400).json({ error: error.message });
   }
 }
 

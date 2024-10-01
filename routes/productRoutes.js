@@ -1,9 +1,10 @@
 // routes/productRoutes.js
 const express = require('express');
-const { getProducts, addProduct } = require('../controllers/productController');
+const { getProducts, addProduct ,getProductById} = require('../controllers/productController');
+const { protect } = require('../middleware/authMiddleware');
 const router = express.Router();
 
-router.get('/', getProducts);
-router.post('/', addProduct);
-
+router.get('/',protect, getProducts);
+router.post('/',protect, addProduct);
+router.get('/:id', getProductById); 
 module.exports = router;
